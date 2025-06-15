@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: domain-aggregator
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:h2:mem:batchdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  batch:
+    jdbc:
+      initialize-schema: never
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-h2.sql
+logging:
+  level:
+    root: info
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} | %-5level | %logger{1} | %msg%n"
+
+domain-aggregator-config:
+  file-ingestion:
+    input-directory: C:\Users\Yashwanth Kumar HT\OneDrive\Desktop\Input #src/main/resources/input
+    output-file-path: C:\Users\Yashwanth Kumar HT\OneDrive\Desktop\Ouput\top_domains.txt #src/main/resources/output/top_domains.txt
+    file-read-delay-ms: 5000
+    file-scan-interval-ms: 10000
+  domain-analytics:
+    aggregation-interval-ms: 60000
+    top-domain-limit: 10
+    template: Top %d domains - %s
