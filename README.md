@@ -134,12 +134,13 @@ domain-aggregator-config:
   domain-analytics:
     aggregation-interval-ms: 60000          # Domain report generation interval
     top-domain-limit: 10
-    template:  Top %d Domains - %s        # Report header format
+    template:  Top %d domains - %s        # Report header format
 ```
 ---
 ## 🕸️ Sequence Diagram
 
-Visualizing the core flow of the system, here is a sequence diagram illustrating the interactions between components for file ingestion, processing, and report generation.
+This sequence diagram captures the end-to-end interaction between components involved in ingesting files, filtering data, aggregating domains, and generating reports.
+
 ![image](https://github.com/user-attachments/assets/2a3335b1-45a6-4952-a5fe-c667cd191658)
 
 ---
