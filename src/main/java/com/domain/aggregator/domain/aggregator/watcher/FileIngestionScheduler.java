@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /*
  * File ingestion scheduler
@@ -33,6 +31,8 @@ public class FileIngestionScheduler {
 
     // Tracks files already processed or processing
     private final Set<String> processedFiles = Collections.synchronizedSet(new HashSet<>());
+
+    private final Map<String, Long> fileSizeMap = new HashMap<>();
 
     @Autowired
     public FileIngestionScheduler(JobLauncher jobLauncher, Job networkConnectionProcessingJob, DomainAggregatorConfiguration config) {
@@ -63,7 +63,7 @@ public class FileIngestionScheduler {
                         continue; // file is already processed
                     }
 
-                    if (isFileReady(file.toPath())) {
+                    if (isFileStable(file)) {
                         // Launch batch job for this file
                         JobParametersBuilder builder = new JobParametersBuilder();
                         builder.addString("filePath", filePath);
@@ -86,5 +86,24 @@ public class FileIngestionScheduler {
         Thread.sleep(domainAggregatorConfiguration.getFileIngestion().getFileReadDelayMs());
         long size2 = Files.size(path);
         return size1 == size2;
+    }
+
+    private boolean isFileStable(File file) {
+        String filePath = file.getAbsolutePath();
+        long currentSize = file.length();
+
+        if (!fileSizeMap.containsKey(filePath)) {
+            fileSizeMap.put(filePath, currentSize);
+            return false;
+        }
+
+        long previousSize = fileSizeMap.get(filePath);
+        if (previousSize != currentSize) {
+            fileSizeMap.put(filePath, currentSize);
+            return false;
+        }
+
+        fileSizeMap.remove(filePath); // Cleanup once file is stable
+        return true;
     }
 }

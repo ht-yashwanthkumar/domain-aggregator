@@ -27,8 +27,8 @@ logging:
 
 domain-aggregator-config:
   file-ingestion:
-    input-directory: C:\Users\Yashwanth Kumar HT\OneDrive\Desktop\Input #src/main/resources/input
-    output-file-path: C:\Users\Yashwanth Kumar HT\OneDrive\Desktop\Ouput\top_domains.txt #src/main/resources/output/top_domains.txt
+    input-directory: src/main/resources/input
+    output-file-path: src/main/resources/output/top_domains.txt
     file-read-delay-ms: 5000
     file-scan-interval-ms: 10000
   domain-analytics:
